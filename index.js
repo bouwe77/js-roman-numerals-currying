@@ -1,4 +1,4 @@
-const assert = require("assert");
+import { executeTests } from "./tests";
 
 console.clear();
 
@@ -47,7 +47,7 @@ decimaltoRomanNumeral(5); // "V"
 decimaltoRomanNumeral(6); // "VI"
 // etc.
 
-// STEP 5: Prevent nested function calls:
+// STEP 5: Prevent nested function calls by composing:
 const compose = (...fns) => (x) => fns.reduceRight((y, f) => f(y), x);
 
 // Note how we order the function calls from last to first, just like we did when nesting:
@@ -58,7 +58,7 @@ const decimaltoRomanNumeral_2 = compose(
   replicateIs
 );
 
-// STEP 6: Piping Instead of composing use piping, so we can order the function calls from first to last
+// STEP 6: Instead of composing use piping, so we can order the function calls from first to last
 
 // Piping in other languages would work like this:
 // As soon as this is supported: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Pipeline_operator
@@ -79,41 +79,11 @@ const decimaltoRomanNumeral_3 = pipe(
 
 // ===================== TESTS ==========================
 
-// Test cases: decimal number is the key, the Roman numberal is the value.
-const testCases = {
-  0: "",
-  1: "I",
-  2: "II",
-  3: "III",
-  4: "IIII",
-  5: "V",
-  6: "VI",
-  7: "VII",
-  8: "VIII",
-  9: "VIIII",
-  10: "X"
-};
-
-// These are the function we want to test:
+// These are the functions we want to test:
 const systemsUnderTest = [
   decimaltoRomanNumeral_IMPERATIVE,
   decimaltoRomanNumeral_2,
   decimaltoRomanNumeral_3
 ];
 
-// Execute all test cases for all systems under test:
-systemsUnderTest.forEach((sut) => {
-  Object.entries(testCases).forEach(([key, value]) => test(key, value, sut));
-});
-
-// This is a utility function to make the tests more readable:
-function test(decimalNumber, romanNumeral, sut) {
-  let result = "✅ OK";
-  try {
-    assert.strictEqual(sut(decimalNumber), romanNumeral);
-  } catch {
-    result = "❌ NOK";
-  }
-
-  console.log(`${result} (${decimalNumber} === ${romanNumeral})`);
-}
+executeTests(systemsUnderTest);
