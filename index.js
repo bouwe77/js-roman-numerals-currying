@@ -5,10 +5,12 @@ console.clear();
 // STEP 0: An imperative, non functional approach:
 function decimaltoRomanNumeral_IMPERATIVE(decimal) {
   let romanNumeral = "I".repeat(decimal);
+  romanNumeral = romanNumeral.replaceAll("IIIII", "V");
+  romanNumeral = romanNumeral.replaceAll("VV", "X");
+  romanNumeral = romanNumeral.replaceAll("XXXXX", "L");
+  // etc.
   return romanNumeral;
 }
-
-test(2, "II", decimaltoRomanNumeral_IMPERATIVE);
 
 // STEP 1: Create the "replicate I character" and a curried replace functions
 
@@ -17,10 +19,10 @@ function replicateIs(howMany) {
   return "I".repeat(howMany);
 }
 
-// This is a curried version of a string replace function.
+// This is a curried version of a string replaceAll function.
 function replace(oldValue, newValue) {
   return function (inputStr) {
-    return inputStr.replace(new RegExp(oldValue), newValue);
+    return inputStr.replaceAll(oldValue, newValue);
   };
 }
 
@@ -77,10 +79,32 @@ const decimaltoRomanNumeral_3 = pipe(
 
 // ===================== TESTS ==========================
 
-// test(2, "II", decimaltoRomanNumeral_3);
-// test(4, "IIII", decimaltoRomanNumeral_3);
-// test(5, "V", decimaltoRomanNumeral_3);
-// test(6, "VI", decimaltoRomanNumeral_3);
+// Test cases: decimal number is the key, the Roman numberal is the value.
+const testCases = {
+  0: "",
+  1: "I",
+  2: "II",
+  3: "III",
+  4: "IIII",
+  5: "V",
+  6: "VI",
+  7: "VII",
+  8: "VIII",
+  9: "VIIII",
+  10: "X"
+};
+
+// These are the function we want to test:
+const systemsUnderTest = [
+  decimaltoRomanNumeral_IMPERATIVE,
+  decimaltoRomanNumeral_2,
+  decimaltoRomanNumeral_3
+];
+
+// Execute all test cases for all systems under test:
+systemsUnderTest.forEach((sut) => {
+  Object.entries(testCases).forEach(([key, value]) => test(key, value, sut));
+});
 
 // This is a utility function to make the tests more readable:
 function test(decimalNumber, romanNumeral, sut) {
