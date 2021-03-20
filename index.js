@@ -4,10 +4,11 @@ console.clear();
 
 // STEP 0: An imperative, non functional approach:
 function decimaltoRomanNumeral_IMPERATIVE(decimal) {
-  let romanNumeral = "I".repeat(decimal);
-  romanNumeral = romanNumeral.replaceAll("IIIII", "V");
-  romanNumeral = romanNumeral.replaceAll("VV", "X");
-  romanNumeral = romanNumeral.replaceAll("XXXXX", "L");
+  let romanNumeral = "I"
+    .repeat(decimal)
+    .replaceAll("IIIII", "V")
+    .replaceAll("VV", "X")
+    .replaceAll("XXXXX", "L");
   // etc.
   return romanNumeral;
 }
@@ -20,6 +21,7 @@ function replicateIs(howMany) {
 }
 
 // This is a curried version of a string replaceAll function.
+//klopt dat wel? Hij heeft 2 parameters!?
 function replace(oldValue, newValue) {
   return function (inputStr) {
     return inputStr.replaceAll(oldValue, newValue);
